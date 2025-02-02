@@ -76,37 +76,6 @@ export class AuthenticationService {
     return await this._generateTokens(user);
   }
 
-  async signOut(refreshTokenDto: RefreshTokenDto): Promise<void> {
-    try {
-      const { sub, refreshTokenId } = await this._jwtService.verifyAsync<
-        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
-      >(refreshTokenDto.refreshToken, {
-        secret: this._jwtConfig.secret,
-        audience: this._jwtConfig.audience,
-        issuer: this._jwtConfig.issuer,
-      });
-
-      const user = await this._usersRepository.findOneByOrFail({
-        id: sub,
-      });
-
-      const isValid = await this._redisService.validate(
-        user.id,
-        refreshTokenId,
-      );
-
-      if (isValid) {
-        await this._redisService.invalidate(user.id);
-      }
-    } catch (err) {
-      if (err instanceof InvalidatedRefreshTokenError) {
-        throw new UnauthorizedException(ERRORS.ACCESS_DENIED);
-      }
-
-      throw new UnauthorizedException();
-    }
-  }
-
   async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<AuthResponse> {
     try {
       const { sub, refreshTokenId } = await this._jwtService.verifyAsync<
@@ -141,7 +110,7 @@ export class AuthenticationService {
     }
   }
 
-  private async _generateTokens(user: User) {
+  private async _generateTokens(user: User): Promise<AuthResponse> {
     const refreshTokenId = crypto.randomUUID();
 
     const [accessToken, refreshToken] = await Promise.all([

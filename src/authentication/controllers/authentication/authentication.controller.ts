@@ -53,12 +53,7 @@ export class AuthenticationController {
 
   @HttpCode(HttpStatus.OK)
   @Get('sign-out')
-  async signOut(
-    @Req() request: Request,
-    @Res({ passthrough: true }) response: Response,
-  ): Promise<void> {
-    await this._authService.signOut(request.cookies as RefreshTokenDto);
-
+  signOut(@Res({ passthrough: true }) response: Response): void {
     response.clearCookie(REFRESH_TOKEN_KEY);
   }
 
