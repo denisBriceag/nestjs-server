@@ -7,6 +7,8 @@ import { ConfigModule } from '@nestjs/config';
 import { CookiesModule } from './core/cookies';
 import { RedisModule } from './core/redis';
 import * as process from 'node:process';
+import { APP_INTERCEPTOR } from '@nestjs/core';
+import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
 
 @Module({
   imports: [
@@ -28,6 +30,12 @@ import * as process from 'node:process';
     UsersModule,
     CookiesModule,
     RedisModule,
+  ],
+  providers: [
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
+    },
   ],
 })
 export class AppModule {}

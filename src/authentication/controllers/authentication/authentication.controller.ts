@@ -4,6 +4,7 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Post,
   Req,
   Res,
@@ -17,11 +18,17 @@ import { AuthType } from '../../types/auth-type.enum';
 import { Request, Response } from 'express';
 import { RefreshTokenDto } from '../../dto/refresh-token.dto';
 import { REFRESH_TOKEN_KEY } from '../../../core';
+import { cookieConfig } from '../../../core/cookies';
+import { ConfigType } from '@nestjs/config';
 
 @Auth(AuthType.None)
 @Controller('auth')
 export class AuthenticationController {
-  constructor(private readonly _authService: AuthenticationService) {}
+  constructor(
+    private readonly _authService: AuthenticationService,
+    @Inject(cookieConfig.KEY)
+    private readonly _config: ConfigType<typeof cookieConfig>,
+  ) {}
 
   @HttpCode(HttpStatus.OK)
   @Post('sign-up')
@@ -32,7 +39,7 @@ export class AuthenticationController {
     const { accessToken, refreshToken } =
       await this._authService.signUp(signUpDto);
 
-    response.cookie(REFRESH_TOKEN_KEY, refreshToken);
+    this._setCookie(response, REFRESH_TOKEN_KEY, refreshToken);
 
     return { accessToken };
   }
@@ -46,7 +53,7 @@ export class AuthenticationController {
     const { accessToken, refreshToken } =
       await this._authService.signIn(signInDto);
 
-    response.cookie(REFRESH_TOKEN_KEY, refreshToken);
+    this._setCookie(response, REFRESH_TOKEN_KEY, refreshToken);
 
     return { accessToken };
   }
@@ -67,8 +74,16 @@ export class AuthenticationController {
       request.cookies as RefreshTokenDto,
     );
 
-    response.cookie(REFRESH_TOKEN_KEY, refreshToken);
+    this._setCookie(response, REFRESH_TOKEN_KEY, refreshToken);
 
     return { accessToken };
+  }
+
+  private _setCookie(response: Response, key: string, value: string): void {
+    response.cookie(key, value, {
+      httpOnly: this._config.httpOnly,
+      sameSite: this._config.sameSite,
+      secure: this._config.secure,
+    });
   }
 }

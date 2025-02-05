@@ -14,7 +14,7 @@ async function bootstrap() {
     credentials: true,
   });
 
-  await app.listen(process.env.PORT ?? 3000);
+  await app.listen(parseInt(process.env.PORT ?? '3000', 10));
 }
 
 bootstrap().catch((err) => console.error(err));
