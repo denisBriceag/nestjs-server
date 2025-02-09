@@ -21,6 +21,8 @@ import {
 } from '../../../core/redis';
 import * as crypto from 'node:crypto';
 import { RefreshTokenDto } from '../../dto/refresh-token.dto';
+import { Request } from 'express';
+import { getAccessToken } from '../../../core/utils/get-access-token.util';
 
 @Injectable()
 export class AuthenticationService {
@@ -32,6 +34,24 @@ export class AuthenticationService {
     private readonly _jwtService: JwtService,
     private readonly _redisService: RedisService,
   ) {}
+
+  async me(request: Request): Promise<AuthResponse> {
+    try {
+      const accessToken = getAccessToken(request);
+
+      const { sub } = await this._jwtService.verifyAsync<
+        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
+      >(accessToken as string, this._jwtConfig);
+
+      const user = await this._usersRepository.findOneByOrFail({
+        id: sub,
+      });
+
+      return this._generateTokens(user);
+    } catch {
+      throw new UnauthorizedException();
+    }
+  }
 
   async signUp(signUpDto: SignUpDto): Promise<AuthResponse> {
     try {

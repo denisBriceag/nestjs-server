@@ -31,6 +31,19 @@ export class AuthenticationController {
   ) {}
 
   @HttpCode(HttpStatus.OK)
+  @Get('me')
+  async me(
+    @Req() request: Request,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const { accessToken, refreshToken } = await this._authService.me(request);
+
+    this._setCookie(response, REFRESH_TOKEN_KEY, refreshToken);
+
+    return { accessToken };
+  }
+
+  @HttpCode(HttpStatus.OK)
   @Post('sign-up')
   async signUp(
     @Body() signUpDto: SignUpDto,

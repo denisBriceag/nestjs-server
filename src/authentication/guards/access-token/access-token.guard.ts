@@ -8,13 +8,13 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../../../core/configs/jwt.config';
 import { ConfigType } from '@nestjs/config';
-import { Request } from 'express';
 import { ERRORS, REFRESH_TOKEN_KEY, REQUEST_USER_KEY } from '../../../core';
 import {
   InvalidatedRefreshTokenError,
   RedisService,
 } from '../../../core/redis';
 import { ActiveUserData } from '../../types/active-user-data.type';
+import { getAccessToken } from '../../../core/utils/get-access-token.util';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
@@ -27,7 +27,7 @@ export class AccessTokenGuard implements CanActivate {
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest();
-    const token = this.extractTokenFromHeader(request);
+    const token = getAccessToken(request);
 
     if (!token || !request.cookies[REFRESH_TOKEN_KEY]) {
       throw new UnauthorizedException();
@@ -58,11 +58,5 @@ export class AccessTokenGuard implements CanActivate {
     }
 
     return true;
-  }
-
-  private extractTokenFromHeader(request: Request): string | undefined {
-    const [_, token] = request.headers.authorization?.split(' ') ?? [];
-
-    return token;
   }
 }

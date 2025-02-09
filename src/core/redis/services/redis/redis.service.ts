@@ -7,6 +7,8 @@ import {
 import Redis from 'ioredis';
 import { redisConfig } from '../../configs/redis.config';
 import { ConfigType } from '@nestjs/config';
+import * as process from 'node:process';
+import { Environment } from '../../../types/environment.enum';
 
 export class InvalidatedRefreshTokenError extends Error {}
 
@@ -22,10 +24,13 @@ export class RedisService
   ) {}
 
   onApplicationBootstrap(): void {
-    this._redisClient = new Redis({
-      port: this._redisConfig.port,
-      host: this._redisConfig.host,
-    });
+    this._redisClient =
+      process.env.NODE_ENV === Environment.DEVELOPMENT
+        ? new Redis({
+            host: this._redisConfig.host,
+            port: this._redisConfig.port,
+          })
+        : new Redis(`${process.env.REDIS_URL_PROD}`);
   }
 
   async insert(userId: number, tokenId: string): Promise<void> {

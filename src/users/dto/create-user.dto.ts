@@ -2,17 +2,17 @@ import { IsNotEmpty, IsString, MinLength } from 'class-validator';
 import { Roles } from '../enums';
 
 export class CreateUserDto {
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   email: string;
 
-  @IsNotEmpty()
   @IsString()
+  @IsNotEmpty()
   name: string;
 
-  @IsNotEmpty()
-  @IsString()
   @MinLength(8)
+  @IsString()
+  @IsNotEmpty()
   password: string;
 
   @IsString()
