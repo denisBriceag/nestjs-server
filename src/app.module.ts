@@ -8,7 +8,8 @@ import { CookiesModule } from './core/cookies';
 import { RedisModule } from './core/redis';
 import * as process from 'node:process';
 import { APP_INTERCEPTOR } from '@nestjs/core';
-import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
+import { LoggingInterceptor } from './core/interceptors';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -30,6 +31,7 @@ import { LoggingInterceptor } from './core/interceptors/logging.interceptor';
     UsersModule,
     CookiesModule,
     RedisModule,
+    MessagesModule,
   ],
   providers: [
     {

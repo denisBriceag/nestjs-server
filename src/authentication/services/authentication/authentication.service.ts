@@ -8,8 +8,6 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { SignUpDto } from '../../dto/sign-up.dto';
 import { SignInDto } from '../../dto/sign-in.dto';
-import { ERRORS, HashingService } from '../../../core';
-import { User } from '../../../users/entities';
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../../../core/configs/jwt.config';
 import { ConfigType } from '@nestjs/config';
@@ -22,7 +20,7 @@ import {
 import * as crypto from 'node:crypto';
 import { RefreshTokenDto } from '../../dto/refresh-token.dto';
 import { Request } from 'express';
-import { getAccessToken } from '../../../core/utils/get-access-token.util';
+import { ERRORS, getAccessToken, HashingService, User } from '../../../core';
 
 @Injectable()
 export class AuthenticationService {

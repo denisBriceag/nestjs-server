@@ -1,10 +1,10 @@
-import { Injectable, NotFoundException, Req } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateUserDto } from '../dto';
 import { UpdateUserDto } from '../dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { User } from '../entities';
 import { Repository } from 'typeorm';
 import { ActiveUserData } from '../../authentication/types/active-user-data.type';
+import { User } from '../../core';
 
 @Injectable()
 export class UsersService {

@@ -18,6 +18,5 @@
     "strictBindCallApply": false,
     "noFallthroughCasesInSwitch": false,
     "files": ["./types/request.d.ts"],
-    "paths": {}
   }
 }

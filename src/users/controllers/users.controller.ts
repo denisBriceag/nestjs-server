@@ -20,24 +20,24 @@ import { ActiveUserData } from '../../authentication/types/active-user-data.type
 @Auth(AuthType.Bearer)
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly _usersService: UsersService) {}
 
   @Role(Roles.ADMIN)
   @Post()
   create(@Body() createUserDto: CreateUserDto): Promise<ActiveUserData> {
-    return this.usersService.create(createUserDto);
+    return this._usersService.create(createUserDto);
   }
 
   @Get()
   findAll(
     @ActiveUser() user: typeof ActiveUser,
   ): Promise<ActiveUserData | ActiveUserData[]> {
-    return this.usersService.findAll();
+    return this._usersService.findAll();
   }
 
   @Get(':id')
   findOne(@Param('id') id: string): Promise<ActiveUserData | ActiveUserData[]> {
-    return this.usersService.findOne(+id);
+    return this._usersService.findOne(+id);
   }
 
   @Role(Roles.ADMIN)
@@ -46,12 +46,12 @@ export class UsersController {
     @Param('id') id: string,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<void> {
-    await this.usersService.update(+id, updateUserDto);
+    await this._usersService.update(+id, updateUserDto);
   }
 
   @Role(Roles.ADMIN)
   @Delete(':id')
   async remove(@Param('id') id: string): Promise<void> {
-    await this.usersService.remove(+id);
+    await this._usersService.remove(+id);
   }
 }
