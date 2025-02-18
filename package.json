@@ -1,15 +1,15 @@
 {
   "name": "sample-server",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "Server Application",
+  "author": "Denis Briceag",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "start": "node dist/main.js",
+    "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --watch",
     "start:prod": "NODE_ENV=production node dist/main",
     "start:debug": "nest start --debug --watch",
