@@ -1,7 +1,7 @@
 {
   "name": "sample-server",
   "version": "0.0.1",
-  "description": "Server Application",
+  "description": "",
   "author": "Denis Briceag",
   "private": true,
   "license": "UNLICENSED",
@@ -11,7 +11,7 @@
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "start": "nest start",
     "start:dev": "NODE_ENV=development nest start --watch",
-    "start:prod": "NODE_ENV=production npm run build && node dist/main",
+    "start:prod": "NODE_ENV=production node dist/main",
     "start:debug": "nest start --debug --watch",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
@@ -67,9 +67,6 @@
     "tsconfig-paths": "^4.2.0",
     "typescript": "^5.7.3",
     "typescript-eslint": "^8.20.0"
-  },
-  "engines": {
-    "node": "20.x"
   },
   "jest": {
     "moduleFileExtensions": [
