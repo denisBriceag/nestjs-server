@@ -98,5 +98,7 @@ export class AuthenticationController {
       sameSite: this._config.sameSite,
       secure: this._config.secure,
     });
+
+    response.cookie('SameSite', 'none');
   }
 }
