@@ -9,7 +9,10 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.enableCors({
-    origin: process.env.CORS_ORIGIN,
+    origin: [
+      process.env.CORS_ORIGIN_1 ?? 'http://localhost:5173',
+      process.env.CORS_ORIGIN_2 ?? 'https://localhost:5173',
+    ],
     methods: process.env.CORS_METHODS,
     credentials: true,
     exposedHeaders: ['Set-Cookie'],

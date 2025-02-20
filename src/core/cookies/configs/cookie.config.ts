@@ -13,6 +13,6 @@ export const cookieConfig = registerAs<CookieConfig>(
     secret: process.env.COOKIES_SECRET?.split(',') || undefined,
     httpOnly: true,
     sameSite: 'none',
-    secure: false,
+    secure: true,
   }),
 );
