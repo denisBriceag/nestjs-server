@@ -10,10 +10,11 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      process.env.CORS_ORIGIN_1 ?? 'http://localhost:5173',
-      process.env.CORS_ORIGIN_2 ?? 'https://localhost:5173',
+      'http://localhost:5173',
+      'https://localhost:5173',
+      'https://nestjs-server-production-85e4.up.railway.app',
     ],
-    methods: process.env.CORS_METHODS,
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
   });

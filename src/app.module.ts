@@ -10,7 +10,6 @@ import * as process from 'node:process';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { LoggingInterceptor } from './core/interceptors';
 import { MessagesModule } from './messages/messages.module';
-import { AppController } from './app.controller';
 
 @Module({
   imports: [
@@ -35,7 +34,6 @@ import { AppController } from './app.controller';
     RedisModule,
     MessagesModule,
   ],
-  controllers: [AppController],
   providers: [
     {
       provide: APP_INTERCEPTOR,
