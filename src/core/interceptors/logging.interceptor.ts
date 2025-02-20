@@ -23,6 +23,7 @@ export class LoggingInterceptor implements NestInterceptor {
         console.log(
           `[After ${Date.now() - now}ms] refreshToken from http cookies = ${request.cookies[REFRESH_TOKEN_KEY]} from ${request.url}`,
         );
+        console.log(`[HEADERS] ${JSON.stringify(request.headers)}`);
       }),
     );
   }

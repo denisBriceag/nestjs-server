@@ -2,7 +2,6 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { ValidationPipe } from '@nestjs/common';
 import * as process from 'node:process';
-import session from 'express-session';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -19,16 +18,6 @@ async function bootstrap() {
     credentials: true,
     exposedHeaders: ['Set-Cookie'],
   });
-
-  app.use(
-    session({
-      secret: process.env.COOKIE_SECRET || 'A',
-      cookie: {
-        sameSite: 'none',
-        secure: true,
-      },
-    }),
-  );
 
   await app.listen(process.env.PORT ?? 3000);
 }
