@@ -84,7 +84,7 @@ export class MessagesService {
     }
   }
 
-  async update(id: number, updateMessageDto: UpdateMessageDto): Promise<void> {
+  async update(id: string, updateMessageDto: UpdateMessageDto): Promise<void> {
     if (Object.keys(updateMessageDto).length === 0)
       throw new HttpException('No content was provided', 204);
 
@@ -95,7 +95,7 @@ export class MessagesService {
     }
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     try {
       await this._messagesRepository.delete(id);
     } catch {

@@ -51,13 +51,13 @@ export class MessagesController {
     @Param('id') id: string,
     @Body() updateMessageDto: UpdateMessageDto,
   ): Promise<void> {
-    return this._messagesService.update(+id, updateMessageDto);
+    return this._messagesService.update(id, updateMessageDto);
   }
 
   @Delete(':id')
   @HttpCode(HttpStatus.OK)
   remove(@Param('id') id: string): Promise<void> {
-    return this._messagesService.remove(+id);
+    return this._messagesService.remove(id);
   }
 
   @Get('like/:id/:userId')
