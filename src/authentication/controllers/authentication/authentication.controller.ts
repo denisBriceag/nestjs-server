@@ -93,7 +93,7 @@ export class AuthenticationController {
   }
 
   private _setCookie(response: Response, key: string, value: string): void {
-    response.cookie(key, `${value} HttpOnly; Secure; SameSite=None`, {
+    response.cookie(key, value, {
       httpOnly: this._config.httpOnly,
       sameSite: this._config.sameSite,
       secure: this._config.secure,
