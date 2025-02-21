@@ -94,9 +94,9 @@ export class AuthenticationController {
 
   private _setCookie(response: Response, key: string, value: string): void {
     response.cookie(key, value, {
-      httpOnly: this._config.httpOnly,
-      sameSite: this._config.sameSite,
-      secure: this._config.secure,
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
     });
   }
 }
