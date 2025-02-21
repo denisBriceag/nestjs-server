@@ -94,11 +94,17 @@ export class AuthenticationService {
     return await this._generateTokens(user);
   }
 
-  async refreshTokens(refreshTokenDto: RefreshTokenDto): Promise<AuthResponse> {
+  async refreshTokens({
+    refreshToken,
+  }: RefreshTokenDto): Promise<AuthResponse> {
+    if (!refreshToken) {
+      throw new UnauthorizedException();
+    }
+
     try {
       const { sub, refreshTokenId } = await this._jwtService.verifyAsync<
         Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
-      >(refreshTokenDto.refreshToken, {
+      >(refreshToken, {
         secret: this._jwtConfig.secret,
         audience: this._jwtConfig.audience,
         issuer: this._jwtConfig.issuer,

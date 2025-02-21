@@ -8,19 +8,12 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import jwtConfig from '../../../core/configs/jwt.config';
 import { ConfigType } from '@nestjs/config';
-import { ERRORS, REFRESH_TOKEN_KEY, REQUEST_USER_KEY } from '../../../core';
-import {
-  InvalidatedRefreshTokenError,
-  RedisService,
-} from '../../../core/redis';
-import { ActiveUserData } from '../../types/active-user-data.type';
-import { getAccessToken } from '../../../core/utils/get-access-token.util';
+import { getAccessToken, REQUEST_USER_KEY } from '../../../core';
 
 @Injectable()
 export class AccessTokenGuard implements CanActivate {
   constructor(
     private readonly _jwtService: JwtService,
-    private readonly _redisService: RedisService,
     @Inject(jwtConfig.KEY)
     private readonly _jwtConfig: ConfigType<typeof jwtConfig>,
   ) {}
@@ -29,31 +22,16 @@ export class AccessTokenGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = getAccessToken(request);
 
-    if (!token || !request.cookies[REFRESH_TOKEN_KEY]) {
+    if (!token) {
       throw new UnauthorizedException();
     }
 
     try {
-      const payload = await this._jwtService.verifyAsync(
+      request[REQUEST_USER_KEY] = await this._jwtService.verifyAsync(
         token,
         this._jwtConfig,
       );
-
-      const { refreshTokenId } = await this._jwtService.verifyAsync<
-        Pick<ActiveUserData, 'sub'> & { refreshTokenId: string }
-      >(request.cookies[REFRESH_TOKEN_KEY], {
-        secret: this._jwtConfig.secret,
-        audience: this._jwtConfig.audience,
-        issuer: this._jwtConfig.issuer,
-      });
-
-      await this._redisService.validate(payload.sub, refreshTokenId);
-
-      request[REQUEST_USER_KEY] = payload;
     } catch (error) {
-      if (error instanceof InvalidatedRefreshTokenError) {
-        throw new UnauthorizedException(ERRORS.ACCESS_DENIED);
-      }
       throw new UnauthorizedException();
     }
 

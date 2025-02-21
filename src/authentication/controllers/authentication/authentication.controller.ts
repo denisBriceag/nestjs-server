@@ -4,7 +4,6 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Inject,
   Post,
   Req,
   Res,
@@ -18,17 +17,11 @@ import { AuthType } from '../../types/auth-type.enum';
 import { Request, Response } from 'express';
 import { RefreshTokenDto } from '../../dto/refresh-token.dto';
 import { REFRESH_TOKEN_KEY } from '../../../core';
-import { cookieConfig } from '../../../core/cookies';
-import { ConfigType } from '@nestjs/config';
 
 @Auth(AuthType.None)
 @Controller('auth')
 export class AuthenticationController {
-  constructor(
-    private readonly _authService: AuthenticationService,
-    @Inject(cookieConfig.KEY)
-    private readonly _config: ConfigType<typeof cookieConfig>,
-  ) {}
+  constructor(private readonly _authService: AuthenticationService) {}
 
   @HttpCode(HttpStatus.OK)
   @Get('me')
