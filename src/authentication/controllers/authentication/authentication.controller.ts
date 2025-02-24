@@ -67,7 +67,11 @@ export class AuthenticationController {
   @HttpCode(HttpStatus.OK)
   @Get('sign-out')
   signOut(@Res({ passthrough: true }) response: Response): void {
-    response.clearCookie(REFRESH_TOKEN_KEY);
+    response.clearCookie(REFRESH_TOKEN_KEY, {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+    });
   }
 
   @HttpCode(HttpStatus.OK)
