@@ -125,14 +125,10 @@ export class AuthenticationService {
       }
 
       return this._generateTokens(user);
-    } catch (err) {
-      if (err instanceof InvalidatedRefreshTokenError) {
-        throw new HttpException(new Error(), 403, {
-          description: 'Access to the resource is denied',
-        });
-      }
-
-      throw new UnauthorizedException();
+    } catch {
+      throw new HttpException(new Error(), 403, {
+        description: 'Access to the resource is denied',
+      });
     }
   }
 
