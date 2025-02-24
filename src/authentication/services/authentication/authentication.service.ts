@@ -99,7 +99,9 @@ export class AuthenticationService {
     refreshToken,
   }: RefreshTokenDto): Promise<AuthResponse> {
     if (!refreshToken) {
-      throw new UnauthorizedException();
+      throw new HttpException(new Error(), 403, {
+        description: 'Access to the resource is denied',
+      });
     }
 
     try {
