@@ -55,6 +55,9 @@ export class MessagesService {
         relations: ['user', 'likes', 'likes.user'],
         take: pageSize,
         skip: (page - 1) * pageSize,
+        order: {
+          postedOn: 'desc',
+        },
       });
 
       const mappedMessages = await this._mapMessage(messagesRow, userId);
