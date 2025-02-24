@@ -18,7 +18,7 @@ export class Message {
   @Column({ type: 'text' })
   message: string;
 
-  @Column({ type: 'date' })
+  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   postedOn: Date;
 
   @ManyToOne(() => User, (user) => user.messages, { onDelete: 'CASCADE' })
